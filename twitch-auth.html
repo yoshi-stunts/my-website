@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>Twitch Login</title>
+  <meta charset="utf-8">
+  <title>Twitch Auth</title>
+  <style>
+    body { background:#0e0e10; color:white; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; font-family:Arial,sans-serif; }
+  </style>
 </head>
 <body>
   <h2>Logging you in…</h2>
-
   <script>
-    (function () {
+    (function() {
       if (!location.hash) return;
 
       const params = new URLSearchParams(location.hash.slice(1));
       const token = params.get("access_token");
       if (!token) return;
 
-      // Send token to opener window
+      // Send token to opener (content.js)
       window.opener?.postMessage({ type: "TWITCH_TOKEN", token }, "*");
 
       // Close popup after short delay
