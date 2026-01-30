@@ -6,20 +6,25 @@
 </head>
 <body>
 <script>
-  // Extract the token from URL fragment
-  const hash = window.location.hash; // e.g., #access_token=xxx&scope=...
+  // Extract token from URL fragment
+  const hash = window.location.hash; // e.g. #access_token=xxx&scope=...
   if (hash) {
     const params = new URLSearchParams(hash.substring(1));
     const token = params.get("access_token");
-
     if (token) {
-      // Send token to background.js
-      chrome.runtime.sendMessage({ action: "TOKEN_RECEIVED", token });
-    }
-  }
+      // Store token in localStorage (so extension can read it)
+      localStorage.setItem("twitchToken", token);
 
-  // Close the page automatically after sending token
-  window.close();
+      document.body.innerHTML = `
+        <p>✅ Twitch login successful!</p>
+        <p>You can close this page and return to Twitch.</p>
+      `;
+    } else {
+      document.body.innerHTML = "<p>❌ Login failed: no token found</p>";
+    }
+  } else {
+    document.body.innerHTML = "<p>❌ Login failed: no hash found</p>";
+  }
 </script>
 </body>
 </html>
