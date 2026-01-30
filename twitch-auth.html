@@ -12,17 +12,13 @@
     const token = params.get("access_token");
 
     if (token) {
-      chrome.runtime.sendMessage(
-        "hmpdilojfpmpiapepfphapbfnijcmadl",
-        {
-          action: "TOKEN_RECEIVED",
-          token
-        },
-        () => {
-          document.body.innerHTML =
-            "✅ Twitch login successful! You can close this page and return to Twitch.";
-        }
+      window.opener?.postMessage(
+        { type: "TWITCH_TOKEN", token },
+        "*"
       );
+
+      document.body.innerHTML =
+        "✅ Twitch login successful! You can close this page.";
     } else {
       document.body.innerHTML = "❌ No token received.";
     }
