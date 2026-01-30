@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Twitch Auth</title>
+  <meta charset="UTF-8" />
+  <title>Twitch Login</title>
 </head>
 <body>
-<p>Logging you in…</p>
+  <p>Logging you in…</p>
 
-<script>
-  const hash = location.hash.substring(1);
-  const params = new URLSearchParams(hash);
-  const token = params.get("access_token");
+  <script>
+    const hash = location.hash;
+    if (hash.includes("access_token")) {
+      const params = new URLSearchParams(hash.substring(1));
+      const token = params.get("access_token");
 
-  if (token) {
-    // Send token to Twitch tab
-    window.opener?.postMessage(
-      { type: "TWITCH_TOKEN", token },
-      "*"
-    );
-  }
+      if (token && window.opener) {
+        window.opener.postMessage(
+          { type: "TWITCH_TOKEN", token },
+          "*"
+        );
+      }
+    }
 
-  setTimeout(() => window.close(), 500);
-</script>
+    setTimeout(() => window.close(), 300);
+  </script>
 </body>
 </html>
