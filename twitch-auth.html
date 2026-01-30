@@ -1,37 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>Twitch Login</title>
-  <style>
-    body {
-      background: #0e0e10;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-  </style>
+  <meta charset="utf-8">
+  <title>Twitch Auth</title>
 </head>
 <body>
-  <h2>Logging you in…</h2>
+<script>
+  if (location.hash) {
+    const params = new URLSearchParams(location.hash.slice(1));
+    const token = params.get("access_token");
 
-  <script>
-    (function () {
-      if (!location.hash) return;
-      const params = new URLSearchParams(location.hash.slice(1));
-      const token = params.get("access_token");
-      if (!token) return;
-
-      // Send token to extension
-      window.opener?.postMessage({ type: "TWITCH_TOKEN", token }, "*");
-
-      // Close after short delay
-      setTimeout(() => window.close(), 300);
-    })();
-  </script>
+    if (token) {
+      chrome.runtime.sendMessage({
+        action: "OAUTH_TOKEN",
+        token
+      });
+    }
+  }
+</script>
 </body>
 </html>
