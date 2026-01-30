@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Twitch Login</title>
+</head>
+<body>
+  <script>
+    const hash = new URLSearchParams(window.location.hash.substring(1));
+    const token = hash.get("access_token");
+    const error = hash.get("error");
+
+    if (token) {
+      // Send token back to the extension
+      window.opener.postMessage(
+        { type: "TWITCH_AUTH_SUCCESS", token },
+        "*"
+      );
+    } else {
+      window.opener.postMessage(
+        { type: "TWITCH_AUTH_ERROR", error },
+        "*"
+      );
+    }
+
+    window.close();
+  </script>
+</body>
+</html>
