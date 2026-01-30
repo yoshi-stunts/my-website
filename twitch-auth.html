@@ -8,20 +8,24 @@
   <p>Logging you in…</p>
 
   <script>
-    const hash = location.hash;
-    if (hash.includes("access_token")) {
-      const params = new URLSearchParams(hash.substring(1));
-      const token = params.get("access_token");
+    const params = new URLSearchParams(window.location.hash.substring(1));
+    const token = params.get("access_token");
 
-      if (token && window.opener) {
-        window.opener.postMessage(
-          { type: "TWITCH_TOKEN", token },
-          "*"
-        );
-      }
+    if (token) {
+      chrome.runtime.sendMessage(
+        "YOUR_EXTENSION_ID_HERE",
+        {
+          action: "TOKEN_RECEIVED",
+          token
+        },
+        () => {
+          document.body.innerHTML =
+            "✅ Twitch login successful! You can close this page and return to Twitch.";
+        }
+      );
+    } else {
+      document.body.innerHTML = "❌ No token received.";
     }
-
-    setTimeout(() => window.close(), 300);
   </script>
 </body>
 </html>
