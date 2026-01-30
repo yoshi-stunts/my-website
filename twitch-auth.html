@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>Twitch Login</title>
   <style>
     body {
@@ -18,6 +18,7 @@
 </head>
 <body>
   <h2>Logging you in…</h2>
+
   <script>
     (function () {
       if (!location.hash) return;
@@ -25,10 +26,10 @@
       const token = params.get("access_token");
       if (!token) return;
 
-      // 🔑 Send token **directly to background**
-      chrome.runtime.sendMessage({ action: "TOKEN_RECEIVED", token });
+      // Send token to extension
+      window.opener?.postMessage({ type: "TWITCH_TOKEN", token }, "*");
 
-      // Close popup
+      // Close after short delay
       setTimeout(() => window.close(), 300);
     })();
   </script>
