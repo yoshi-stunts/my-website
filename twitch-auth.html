@@ -4,16 +4,7 @@
   <meta charset="utf-8" />
   <title>Twitch Login</title>
   <style>
-    body {
-      background: #0e0e10;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
+    body { background:#0e0e10; color:white; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; font-family:Arial,sans-serif;}
   </style>
 </head>
 <body>
@@ -25,14 +16,10 @@
 
       const params = new URLSearchParams(location.hash.slice(1));
       const token = params.get("access_token");
-
       if (!token) return;
 
-      // 🔑 Send token to extension (content.js → background.js)
-      window.opener?.postMessage(
-        { type: "TWITCH_TOKEN", token },
-        "*"
-      );
+      // Send token directly to background.js
+      chrome.runtime.sendMessage({ action: "TOKEN_RECEIVED", token });
 
       // Close popup after short delay
       setTimeout(() => window.close(), 300);
