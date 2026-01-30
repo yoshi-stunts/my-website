@@ -25,9 +25,10 @@
       const token = params.get("access_token");
       if (!token) return;
 
-      // 🔑 Send token to content script via window.postMessage
-      window.opener?.postMessage({ type: "TWITCH_TOKEN", token }, "*");
+      // 🔑 Send token **directly to background**
+      chrome.runtime.sendMessage({ action: "TOKEN_RECEIVED", token });
 
+      // Close popup
       setTimeout(() => window.close(), 300);
     })();
   </script>
